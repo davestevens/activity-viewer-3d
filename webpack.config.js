@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const DotenvWebpackPlugin = require("dotenv-webpack");
 const path = require("path");
 
 const mode = process.env.NODE_ENV || "development";
 const prod = mode === "production";
 const buildDir = path.join(__dirname, "build");
+const srcDir = path.join(__dirname, "src");
 
 module.exports = {
   entry: {
     bundle: ["./src/main.ts"],
+    popup: ["./src/strava-oauth/index.ts"],
   },
   resolve: {
     alias: {
@@ -56,10 +59,18 @@ module.exports = {
   },
   mode,
   plugins: [
+    new DotenvWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: "[name].css",
     }),
-    new HtmlWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      chunks: ["popup"],
+      filename: "popup.html",
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ["bundle"],
+      filename: "index.html",
+    }),
   ],
   devtool: prod ? false : "source-map",
   devServer: {
