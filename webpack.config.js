@@ -25,6 +25,7 @@ module.exports = {
     path: buildDir,
     filename: "[name].js",
     chunkFilename: "[name].[id].js",
+    publicPath: "/",
   },
   module: {
     rules: [
@@ -77,5 +78,6 @@ module.exports = {
     contentBase: buildDir,
     compress: true,
     hot: true,
+    historyApiFallback: true,
   },
 };

@@ -1,16 +1,18 @@
-<script lang="ts">
-  const handleAuth = (): void => {
-    const popup = window.open("/popup.html", "_blank", "width=700,height=600");
-    window.onmessage = (message: any): void => {
-      if (message.data.type === "AUTH") {
-        console.log(message.data);
-        popup.close();
-      }
-    };
-  };
+<script>
+  import { Router, Route } from "svelte-routing";
+  import Home from "./pages/Home.svelte";
+  import Activities from "./pages/Activities.svelte";
+  import Activity from "./pages/Activity.svelte";
+
+  export let url = "";
 </script>
 
-<style>
-</style>
-
-<main><button on:click={handleAuth}>Login</button></main>
+<Router {url}>
+  <div>
+    <Route path="activities/:id" component={Activity} />
+    <Route path="activities" component={Activities} />
+    <Route path="/">
+      <Home />
+    </Route>
+  </div>
+</Router>
