@@ -3,6 +3,11 @@ import { AUTH_KEY } from "../consts";
 
 export interface IAuthStore {
   access_token: string;
+  athlete: {
+    firstname: string;
+    lastname: string;
+    profile_medium: string;
+  };
 }
 
 const createAuth = () => {

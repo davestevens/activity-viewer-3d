@@ -1,6 +1,6 @@
 import { getRequest } from "./authedRequest";
 
-interface IActivity {
+export interface IActivity {
   name: string;
   type: string;
   id: string;

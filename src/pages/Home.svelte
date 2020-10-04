@@ -15,4 +15,15 @@
 <style>
 </style>
 
-<main><button on:click={handleAuth}>Login</button></main>
+<div class="row row h-100 justify-content-center align-items-center">
+  <main class="col-4">
+    <h1 class="display-3">Activity Viewer 3D</h1>
+    <p class="lead">
+      View your Strava activities in 3D space with heartrate data visualization.
+    </p>
+    <button
+      type="button"
+      class="btn btn-primary btn-lg btn-block mb-2"
+      on:click={handleAuth}>Login</button>
+  </main>
+</div>
