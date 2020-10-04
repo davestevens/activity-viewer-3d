@@ -1,4 +1,5 @@
 export const AUTH_KEY = "AUTH_KEY";
+export const ZONES_KEY = "ZONES_KEY";
 
 export const HEART_RATE_ZONE_COLORS = [
   "#0000ff",
