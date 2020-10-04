@@ -1,5 +1,6 @@
-export const AUTH_KEY = "AUTH_KEY";
-export const ZONES_KEY = "ZONES_KEY";
+export const AUTH_KEY = "AUTH";
+export const ACTIVITY_KEY = "ACTIVITY_{id}";
+export const ZONES_KEY = "ZONES";
 
 export const HEART_RATE_ZONE_COLORS = [
   "#0000ff",
