@@ -5,7 +5,7 @@
   import Activities from "./pages/Activities.svelte";
 </script>
 
-<div class="container-fluid h-100">
+<div class="container-fluid h-100 overflow-hidden">
   {#if $auth}
     <Header />
     <Activities />

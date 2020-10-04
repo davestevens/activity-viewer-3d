@@ -23,8 +23,6 @@ const directionalLight = new THREE.DirectionalLight(0xffffff, 0.85);
 scene.add(directionalLight);
 
 const renderer = new THREE.WebGLRenderer();
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
 
 interface IData {
   latlng: {
@@ -54,8 +52,26 @@ const hrData = [
   { value: 186, color: new THREE.Color(0xff0000) },
 ];
 
+let mesh: THREE.Mesh;
+
+export const setup = (container: HTMLElement): void => {
+  camera.aspect = container.offsetWidth / container.offsetHeight;
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(container.offsetWidth, container.offsetHeight);
+  container.appendChild(renderer.domElement);
+
+  const render = () => {
+    renderer.render(scene, camera);
+    orbit.update();
+    requestAnimationFrame(render);
+  };
+  render();
+};
+
 export const renderRoute = (data: IData): void => {
-  document.body.appendChild(renderer.domElement);
+  if (mesh) {
+    scene.remove(mesh);
+  }
   const hrPicker = hrColorPicker(hrData, data.heartrate.data);
 
   const FACES_PER_SEGMENT = 16;
@@ -92,13 +108,6 @@ export const renderRoute = (data: IData): void => {
 
   setGradient(geometry);
 
-  const mesh = new THREE.Mesh(geometry, material);
+  mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
-
-  const render = () => {
-    renderer.render(scene, camera);
-    orbit.update();
-    requestAnimationFrame(render);
-  };
-  render();
 };

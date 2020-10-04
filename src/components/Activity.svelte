@@ -1,7 +1,13 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { getActivity, IActivity } from "../services/getActivity";
-  import { renderRoute } from "../route";
+  import { setup, renderRoute } from "../route";
   import { activity } from "../stores/activity";
+
+  let container: HTMLElement;
+  onMount(() => {
+    setup(container);
+  });
 
   let activityPromise: Promise<IActivity>;
   activity.subscribe((value) => {
@@ -20,14 +26,4 @@
   }
 </style>
 
-<main>
-  <h2>Activity {$activity}</h2>
-
-  {#await activityPromise}
-    <div>Loading</div>
-  {:then}
-    <div>Loaded</div>
-  {:catch error}
-    <div>Error: {error.message}</div>
-  {/await}
-</main>
+<main bind:this={container} />
