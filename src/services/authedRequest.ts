@@ -1,9 +1,12 @@
-import { AUTH_KEY } from "../consts";
+import { auth, IAuthStore } from "../stores/auth";
+import { get } from "svelte/store";
 
 const getAuthToken = (): string => {
-  const authData = JSON.parse(localStorage.getItem(AUTH_KEY));
-  const accessToken = authData?.access_token;
-  return `Bearer ${accessToken}`;
+  const value: IAuthStore = get(auth);
+  if (!value) {
+    throw new Error("Unauthenticated");
+  }
+  return `Bearer ${value.access_token}`;
 };
 
 export const getRequest = async <T>(url: string): Promise<T> => {

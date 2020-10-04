@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { Link } from "svelte-routing";
   import { getActivities } from "../services/getActivities";
   import { getZones } from "../services/getZones";
 
@@ -14,12 +13,7 @@
   {:then activities}
     <ul>
       {#each activities as activity}
-        <li>
-          {activity.name}
-          :
-          {activity.start_date}
-          <Link to={`/activities/${activity.id}`}>View</Link>
-        </li>
+        <li>{activity.name} : {activity.start_date}</li>
       {/each}
     </ul>
   {:catch error}

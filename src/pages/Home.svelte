@@ -1,17 +1,12 @@
 <script lang="ts">
-  import { navigate } from "svelte-routing";
-  import { AUTH_KEY } from "../consts";
+  import { auth } from "../stores/auth";
 
   const handleAuth = (): void => {
     const popup = window.open("/popup.html", "_blank", "width=700,height=600");
     window.onmessage = (message: any): void => {
       if (message.data.type === "AUTH") {
-        // TODO: check error
-        console.log(message.data);
-        // TODO: move to a store
-        localStorage.setItem(AUTH_KEY, JSON.stringify(message.data.data));
+        auth.setAuth(message.data.data);
         popup.close();
-        navigate("/activities");
       }
     };
   };
