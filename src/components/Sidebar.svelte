@@ -6,16 +6,18 @@
 
 <style>
   .sidebar {
-    padding: 48px 0 0;
+    margin-top: 48px;
+    width: 320px;
+    height: calc(100vh - 48px);
   }
 
   .sidebar-sticky {
     overflow: auto;
-    height: calc(100vh - 48px);
+    height: 100%;
   }
 </style>
 
-<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+<nav class="sidebar">
   <div class="sidebar-sticky">
     <SidebarHeader title="Activities" />
     <ActivityList />
