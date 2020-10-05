@@ -1,13 +1,16 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { getActivity, IActivity } from "../services/getActivity";
-  import { setup, renderRoute } from "../route";
+  import { setup, setHeartRateData, renderRoute } from "../route";
   import { activity } from "../stores/activity";
+  import { getZones } from "../services/getZones";
 
   let container: HTMLElement;
   onMount(() => {
     setup(container);
   });
+
+  getZones().then((data) => setHeartRateData(data.heart_rate));
 
   let activityPromise: Promise<IActivity>;
   activity.subscribe((value) => {

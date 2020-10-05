@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { CurveFromGPS } from "./curveFromGPS";
 import { hrColorPicker } from "./hrColorPicker";
+import type { IZoneData } from "../services/getZones";
 
 // Sets Z axis to UP
 THREE.Object3D.DefaultUp.set(0, 0, 1);
@@ -46,10 +47,10 @@ orbit.autoRotate = true;
 
 const hrData = [
   { value: 0, color: new THREE.Color(0x0000ff) },
-  { value: 112, color: new THREE.Color(0x00ff00) },
-  { value: 149, color: new THREE.Color(0xffff00) },
-  { value: 167, color: new THREE.Color(0xffa500) },
-  { value: 186, color: new THREE.Color(0xff0000) },
+  { value: 0, color: new THREE.Color(0x00ff00) },
+  { value: 0, color: new THREE.Color(0xffff00) },
+  { value: 0, color: new THREE.Color(0xffa500) },
+  { value: 0, color: new THREE.Color(0xff0000) },
 ];
 
 let mesh: THREE.Mesh;
@@ -66,6 +67,12 @@ export const setup = (container: HTMLElement): void => {
     requestAnimationFrame(render);
   };
   render();
+};
+
+export const setHeartRateData = (data: IZoneData): void => {
+  data.zones.forEach((zone, index) => {
+    hrData[index].value = zone.min;
+  });
 };
 
 export const renderRoute = (data: IData): void => {
