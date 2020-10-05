@@ -5,17 +5,12 @@
   export let color: string;
 </script>
 
-<style>
-  .color-marker {
-    display: inline-block;
-    vertical-align: middle;
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-</style>
-
-<div>
-  <span>{label} </span>
-  <span class="color-marker" style={`background-color: ${color};`} />
-  <span>{min} - {max}</span>
+<div class="list-group-item">
+  <div class="d-flex w-100 justify-content-between align-items-center">
+    <h4 class="mb-0">{label}</h4>
+    <span>{min} - {max}</span>
+    <span
+      class="badge"
+      style={`background-color: ${color};`}>&nbsp;&nbsp;&nbsp;</span>
+  </div>
 </div>
