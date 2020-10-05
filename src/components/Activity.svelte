@@ -1,11 +1,10 @@
 <script lang="ts">
-  export let id: string;
-  import { afterUpdate } from "svelte";
   import { getActivity, IActivity } from "../services/getActivity";
+  import { activity } from "../stores/activity";
 
   let activityPromise: Promise<IActivity>;
-  afterUpdate(() => {
-    activityPromise = getActivity(id);
+  activity.subscribe((value) => {
+    activityPromise = getActivity(value);
   });
 </script>
 
@@ -16,7 +15,7 @@
 </style>
 
 <main class="col-md-9 ml-sm-auto col-lg-10 px-4">
-  <h2>Activity {id}</h2>
+  <h2>Activity {$activity}</h2>
 
   {#await activityPromise}
     <div>Loading</div>

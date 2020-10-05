@@ -1,5 +1,4 @@
 <script lang="ts">
-  export let onSelect: (id: string) => void;
   import SidebarHeader from "../components/SidebarHeader.svelte";
   import ActivityList from "../components/ActivityList.svelte";
   import ZonesData from "../components/ZonesData.svelte";
@@ -19,7 +18,7 @@
 <nav class="col-md-2 d-none d-md-block bg-light sidebar">
   <div class="sidebar-sticky">
     <SidebarHeader title="Activities" />
-    <ActivityList {onSelect} />
+    <ActivityList />
 
     <SidebarHeader title="Zones Data" />
     <!-- TODO: expandable -->
