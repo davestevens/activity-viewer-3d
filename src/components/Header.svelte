@@ -10,6 +10,11 @@
     padding-bottom: 0.75rem;
     font-size: 1rem;
   }
+
+  .navbar-image {
+    width: 1.875rem;
+    height: 1.875rem;
+  }
 </style>
 
 <nav
@@ -20,9 +25,7 @@
       <span class="navbar-text">
         {displayName}
         <img
-          class="rounded-circle"
-          width="30"
-          height="30"
+          class="rounded-circle navbar-image"
           src={$auth.athlete.profile_medium}
           alt="Profile" />
       </span>

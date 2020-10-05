@@ -12,8 +12,8 @@
 
 <style>
   main {
-    margin-top: 48px;
-    width: calc(100% - 320px);
+    margin-top: 3rem;
+    width: calc(100% - 20rem);
   }
 </style>
 

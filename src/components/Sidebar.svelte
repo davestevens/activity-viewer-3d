@@ -12,9 +12,9 @@
 
 <style>
   .sidebar {
-    margin-top: 48px;
-    width: 320px;
-    height: calc(100vh - 48px);
+    margin-top: 3rem;
+    width: 20rem;
+    height: calc(100vh - 3rem);
     display: flex;
     flex-direction: column;
     border-right: 1px solid #00000020;
