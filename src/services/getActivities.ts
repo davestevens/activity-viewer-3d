@@ -9,10 +9,11 @@ export interface IActivity {
   start_latlng: number[];
 }
 
-const URL = "https://www.strava.com/api/v3/athlete/activities";
+const URL = "https://www.strava.com/api/v3/athlete/activities?page={page}";
 
-export const getActivities = async (): Promise<IActivity[]> => {
-  const activities = await getRequest<IActivity[]>(URL);
+export const getActivities = async (page: number): Promise<IActivity[]> => {
+  const url = URL.replace("{page}", `${page}`);
+  const activities = await getRequest<IActivity[]>(url);
 
   return activities;
 };
