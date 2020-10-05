@@ -1,5 +1,6 @@
 <script lang="ts">
   import { auth } from "../stores/auth";
+  import ExampleActivity from "../components/ExampleActivity.svelte";
 
   let error: string = "";
 
@@ -21,8 +22,9 @@
 <style>
 </style>
 
-<div class="row row h-100 justify-content-center align-items-center">
-  <main class="col-4 text-center">
+<div class="row h-100 justify-content-center align-items-start">
+  <ExampleActivity />
+  <main class="col-4 card text-center">
     <h1 class="display-3">Activity Viewer 3D</h1>
     <p class="lead">
       View your Strava activities in 3D space with heartrate data visualization.
