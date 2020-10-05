@@ -4,7 +4,9 @@
 
   let activityPromise: Promise<IActivity>;
   activity.subscribe((value) => {
-    activityPromise = getActivity(value);
+    if (value) {
+      activityPromise = getActivity(value);
+    }
   });
 </script>
 
