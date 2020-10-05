@@ -4600,8 +4600,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url(/46c13076acbc82aac893393573f90dc1.eot);
-  src: url(/46c13076acbc82aac893393573f90dc1.eot?#iefix) format("embedded-opentype"), url(/2ffc1f5b1909c172f2396d16f9b8571e.woff2) format("woff2"), url(/d87ca79c4938f3ca66cbfa9d28526ba7.woff) format("woff"), url(/131054e1a15e8c1a2be90a810fd3b340.ttf) format("truetype"), url(/85ca58b3dfb55c08f9cf7532b755c0ac.svg#fontawesome) format("svg"); }
+  src: url(46c13076acbc82aac893393573f90dc1.eot);
+  src: url(46c13076acbc82aac893393573f90dc1.eot?#iefix) format("embedded-opentype"), url(2ffc1f5b1909c172f2396d16f9b8571e.woff2) format("woff2"), url(d87ca79c4938f3ca66cbfa9d28526ba7.woff) format("woff"), url(131054e1a15e8c1a2be90a810fd3b340.ttf) format("truetype"), url(85ca58b3dfb55c08f9cf7532b755c0ac.svg#fontawesome) format("svg"); }
 
 .fab {
   font-family: 'Font Awesome 5 Brands';
@@ -4611,8 +4611,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url(/59f4a1ec50a2e39950ae7abbfebe6bf4.eot);
-  src: url(/59f4a1ec50a2e39950ae7abbfebe6bf4.eot?#iefix) format("embedded-opentype"), url(/6462b09d97cb0149ec021b8e01b9cc90.woff2) format("woff2"), url(/aee72cf0a11239dba36c7e37f831fae4.woff) format("woff"), url(/8ce738c3de1f5af6f0db90f9b55b71c7.ttf) format("truetype"), url(/4d5e84b7703fc47f5b870e30b01fbb70.svg#fontawesome) format("svg"); }
+  src: url(59f4a1ec50a2e39950ae7abbfebe6bf4.eot);
+  src: url(59f4a1ec50a2e39950ae7abbfebe6bf4.eot?#iefix) format("embedded-opentype"), url(6462b09d97cb0149ec021b8e01b9cc90.woff2) format("woff2"), url(aee72cf0a11239dba36c7e37f831fae4.woff) format("woff"), url(8ce738c3de1f5af6f0db90f9b55b71c7.ttf) format("truetype"), url(4d5e84b7703fc47f5b870e30b01fbb70.svg#fontawesome) format("svg"); }
 
 .far {
   font-family: 'Font Awesome 5 Free';
@@ -4622,8 +4622,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: url(/ab3ef4abdaedeced52195d7ae4917446.eot);
-  src: url(/ab3ef4abdaedeced52195d7ae4917446.eot?#iefix) format("embedded-opentype"), url(/f2d8806e4ac0d7a6e72fb4f22bd3c802.woff2) format("woff2"), url(/1bdf103cf1d2f4875cb40d7f8263339f.woff) format("woff"), url(/6e617fd4bfae0ebd495be461ed773e32.ttf) format("truetype"), url(/dad3d991c79c6ec9e284296aab3f8cc3.svg#fontawesome) format("svg"); }
+  src: url(ab3ef4abdaedeced52195d7ae4917446.eot);
+  src: url(ab3ef4abdaedeced52195d7ae4917446.eot?#iefix) format("embedded-opentype"), url(f2d8806e4ac0d7a6e72fb4f22bd3c802.woff2) format("woff2"), url(1bdf103cf1d2f4875cb40d7f8263339f.woff) format("woff"), url(6e617fd4bfae0ebd495be461ed773e32.ttf) format("truetype"), url(dad3d991c79c6ec9e284296aab3f8cc3.svg#fontawesome) format("svg"); }
 
 .fa,
 .fas {
