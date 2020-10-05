@@ -1,5 +1,5 @@
 {
-  "name": "svelte-app",
+  "name": "activity-viewer-3d",
   "version": "1.0.0",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
