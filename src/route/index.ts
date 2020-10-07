@@ -61,6 +61,12 @@ export const setup = (container: HTMLElement): void => {
   renderer.setSize(container.offsetWidth, container.offsetHeight);
   container.appendChild(renderer.domElement);
 
+  window.onresize = () => {
+    camera.aspect = container.offsetWidth / container.offsetHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.offsetWidth, container.offsetHeight);
+  };
+
   const render = () => {
     renderer.render(scene, camera);
     orbit.update();
