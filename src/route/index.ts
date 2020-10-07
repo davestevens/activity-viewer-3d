@@ -124,70 +124,64 @@ export const renderRoute = (data: IData): void => {
   mesh = new THREE.Mesh(geometry, material);
   // scene.add(mesh);
 
-  var point1Height = 5;
-  var point2Height = 7;
-  var sectionLength = 10;
-  var width = 6;
+  const SEGMENT_WIDTH = 1;
 
-  var side1 = new THREE.Shape()
-    .moveTo(0, 0)
-    .lineTo(sectionLength, 0)
-    .lineTo(sectionLength, point2Height)
-    .lineTo(0, point1Height)
-    .lineTo(0, 0);
+  // TODO: figure out y axis rotation
+  // need to move pivot point
+  const drawSegment = (x1, y1, z1, x2, y2, z2): THREE.Group => {
+    const group = new THREE.Group();
 
-  var side2 = new THREE.Shape()
-    .moveTo(0, 0)
-    .lineTo(sectionLength, 0)
-    .lineTo(sectionLength, point2Height)
-    .lineTo(0, point1Height)
-    .lineTo(0, 0);
+    const sectionLength = x2 - x1;
+    const side = new THREE.Shape()
+      .moveTo(0, 0)
+      .lineTo(sectionLength, 0)
+      .lineTo(sectionLength, z2)
+      .lineTo(0, z1)
+      .lineTo(0, 0);
 
-  var pointHeightDiff = Math.abs(point2Height - point1Height);
-  var topLength = Math.sqrt(
-    Math.pow(sectionLength, 2) + Math.pow(pointHeightDiff, 2)
-  );
-  var top = new THREE.Shape()
-    .moveTo(0, 0)
-    .lineTo(topLength, 0)
-    .lineTo(topLength, width)
-    .lineTo(0, width)
-    .lineTo(0, 0);
-  var topAngle = Math.atan(pointHeightDiff / sectionLength);
+    const pointHeightDiff = Math.abs(z2 - z1);
+    const topLength = Math.sqrt(
+      Math.pow(sectionLength, 2) + Math.pow(pointHeightDiff, 2)
+    );
 
-  {
-    var group = new THREE.Group();
+    const top = new THREE.Shape()
+      .moveTo(0, 0)
+      .lineTo(topLength, 0)
+      .lineTo(topLength, SEGMENT_WIDTH)
+      .lineTo(0, SEGMENT_WIDTH)
+      .lineTo(0, 0);
+    const topAngle = Math.atan(pointHeightDiff / sectionLength);
 
-    var geometry1 = new THREE.ShapeBufferGeometry(side1);
-    var mesh1 = new THREE.Mesh(
-      geometry1,
+    const sideGeometry = new THREE.ShapeBufferGeometry(side);
+    const sideMesh = new THREE.Mesh(
+      sideGeometry,
       new THREE.MeshPhongMaterial({ color: 0xff0000, side: THREE.DoubleSide })
     );
-    mesh1.position.set(0, 0, 0);
-    mesh1.rotation.set(Math.PI / 2, 0, 0);
-    group.add(mesh1);
+    const sideBMesh = sideMesh.clone();
+    sideMesh.position.set(0, 0, 0);
+    sideMesh.rotation.set(Math.PI / 2, 0, 0);
+    group.add(sideMesh);
 
-    var geometry2 = new THREE.ShapeBufferGeometry(side2);
-    var mesh2 = new THREE.Mesh(
-      geometry2,
+    sideBMesh.position.set(0, SEGMENT_WIDTH, 0);
+    sideBMesh.rotation.set(Math.PI / 2, 0, 0);
+    group.add(sideBMesh);
+
+    const topGeometry = new THREE.ShapeBufferGeometry(top);
+    const topMesh = new THREE.Mesh(
+      topGeometry,
       new THREE.MeshPhongMaterial({ color: 0xff0000, side: THREE.DoubleSide })
     );
-    mesh2.position.set(0, width, 0);
-    mesh2.rotation.set(Math.PI / 2, 0, 0);
-    group.add(mesh2);
+    topMesh.position.set(0, 0, z1);
+    topMesh.rotation.set(0, (z1 > z2 ? 1 : -1) * topAngle, 0);
+    group.add(topMesh);
 
-    var geometry3 = new THREE.ShapeBufferGeometry(top);
-    var mesh3 = new THREE.Mesh(
-      geometry3,
-      new THREE.MeshPhongMaterial({ color: 0xff0000, side: THREE.DoubleSide })
-    );
-    mesh3.position.set(0, 0, point1Height);
-    mesh3.rotation.set(0, (point1Height > point2Height ? 1 : -1) * topAngle, 0);
-    group.add(mesh3);
+    group.position.set(-sectionLength, -SEGMENT_WIDTH / 2, 0);
 
-    // group.position.set(10, 10, 10);
-    scene.add(group);
-  }
+    return group;
+  };
+
+  const segment = drawSegment(0, 0, 5, 2, 0, 6);
+  scene.add(segment);
 
   var gridHelper = new THREE.GridHelper(100, 21);
   gridHelper.rotateX(Math.PI / 2);
