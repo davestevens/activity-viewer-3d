@@ -5,7 +5,7 @@
   let error: string = "";
 
   const handleAuth = (): void => {
-    const popup = window.open("/popup.html", "_blank", "width=700,height=600");
+    const popup = window.open("popup.html", "_blank", "width=700,height=600");
     window.onmessage = (message: any): void => {
       if (message.data.type === "AUTH") {
         if (message.data.error) {

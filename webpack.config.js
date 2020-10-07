@@ -7,7 +7,6 @@ const path = require("path");
 const mode = process.env.NODE_ENV || "development";
 const prod = mode === "production";
 const buildDir = path.join(__dirname, "build");
-const srcDir = path.join(__dirname, "src");
 
 module.exports = {
   entry: {
@@ -25,7 +24,6 @@ module.exports = {
     path: buildDir,
     filename: "[name].js",
     chunkFilename: "[name].[id].js",
-    publicPath: "/",
   },
   module: {
     rules: [
@@ -78,10 +76,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       chunks: ["popup"],
       filename: "popup.html",
+      title: "Activity Viewer 3D - Login",
     }),
     new HtmlWebpackPlugin({
       chunks: ["bundle"],
       filename: "index.html",
+      title: "Activity Viewer 3D",
     }),
   ],
   devtool: prod ? false : "source-map",
