@@ -19,9 +19,9 @@ export class CurveFromGPS extends Curve<Vector3> {
     this.positionData = convertLatLngToPosition(latlngs, altitudes);
     const xOffset = 0 - this.positionData.xLimits.diff / 2;
     const yOffset = 0 - this.positionData.yLimits.diff / 2;
-    const zOffset = 0 - this.positionData.zLimits.diff / 2;
+    const zOffset = this.positionData.zLimits.min; // 0 - this.positionData.zLimits.diff / 2;
     this.points = this.positionData.positions.map(({ x, y, z }) => {
-      return new Vector3(x + xOffset, y + yOffset, z + zOffset);
+      return new Vector3(x + xOffset, y + yOffset, z);
     });
   }
 
