@@ -12,13 +12,18 @@
 
   getZones().then((data) => setHeartRateData(data.heart_rate));
 
-  let activityPromise: Promise<IActivity>;
   activity.subscribe((value) => {
     if (!value) {
       return;
     }
-    activityPromise = getActivity(value);
-    activityPromise.then((data) => renderRoute(data));
+    getActivity(value).then((data) => {
+      console.log(data);
+      if (!data.latlng || !data.heartrate) {
+        alert("Missing GPS / Heart Rate data");
+        return;
+      }
+      renderRoute(data);
+    });
   });
 </script>
 
