@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { CurveFromGPS } from "./curveFromGPS";
-import { hrColorPicker } from "./hrColorPicker";
+import { colorFromValue } from "./hrColorPicker";
 import type { IZoneData } from "../services/getZones";
+import { convertLatLngToPosition } from "./convertLatLngToPosition";
 
 // Sets Z axis to UP
 THREE.Object3D.DefaultUp.set(0, 0, 1);
@@ -85,44 +85,6 @@ export const renderRoute = (data: IData): void => {
   if (mesh) {
     scene.remove(mesh);
   }
-  const hrPicker = hrColorPicker(hrData, data.heartrate.data);
-
-  const FACES_PER_SEGMENT = 16;
-  const setGradient = (geometry: THREE.Geometry): void => {
-    const faceCount = geometry.faces.length;
-    const segmentCount = faceCount / FACES_PER_SEGMENT;
-    for (let i = 0; i < faceCount; ++i) {
-      const color = hrPicker(
-        Math.floor((i / FACES_PER_SEGMENT) % faceCount) / segmentCount
-      );
-      geometry.faces[i].color = color;
-    }
-  };
-
-  const curve = new CurveFromGPS(data.latlng.data, data.altitude.data);
-  const geometry = new THREE.TubeGeometry(
-    curve,
-    5000,
-    1,
-    FACES_PER_SEGMENT / 2,
-    false
-  );
-  const material = new THREE.MeshPhongMaterial({
-    side: THREE.DoubleSide,
-    flatShading: true,
-    vertexColors: true,
-  });
-
-  const objectSize = Math.max(curve.width, curve.height);
-  const distance = Math.abs(objectSize / Math.sin(FOV / 2));
-
-  camera.position.y = -distance;
-  camera.position.z = distance / 4;
-
-  setGradient(geometry);
-
-  mesh = new THREE.Mesh(geometry, material);
-  // scene.add(mesh);
 
   const SEGMENT_WIDTH = 1;
 
@@ -177,33 +139,48 @@ export const renderRoute = (data: IData): void => {
     return group;
   };
 
-  const points = [
-    { x: 0, y: 0, z: 5, color: 0xff0000 },
-    { x: 1, y: 0, z: 6, color: 0x00ff00 },
-    { x: 2, y: 0, z: 6, color: 0x0000ff },
-    { x: 4, y: 0, z: 5, color: 0xff0000 },
-    { x: 4, y: 5, z: 5, color: 0x00ff00 },
-    { x: 6, y: 5, z: 3, color: 0x0000ff },
-  ];
+  const positionData = convertLatLngToPosition(
+    data.latlng.data,
+    data.altitude.data
+  );
+  const sortedSteps = hrData.sort((a, b) => a.value - b.value);
+  const xOffset = 0 - positionData.xLimits.diff / 2;
+  const yOffset = 0 - positionData.yLimits.diff / 2;
+  for (let i = 1; i < positionData.positions.length; ++i) {
+    const from = positionData.positions[i - 1];
+    const fromX = from.x + xOffset;
+    const fromY = from.y + yOffset;
+    const to = positionData.positions[i];
+    const toX = to.x + xOffset;
+    const toY = to.y + yOffset;
 
-  for (let i = 1; i < points.length; ++i) {
-    const pointA = points[i - 1];
-    const pointB = points[i];
-    const x = pointB.x - pointA.x;
-    const y = pointB.y - pointA.y;
+    const x = Math.abs(toX - fromX);
+    const y = Math.abs(toY - fromY);
     const segmentLength = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-    const color = new THREE.Color(pointB.color);
-    const segment = drawSegment(segmentLength, pointA.z, pointB.z, color);
+    const color = colorFromValue(
+      sortedSteps,
+      (data.heartrate.data[i - 1] + data.heartrate.data[i]) / 2
+    );
+    const segment = drawSegment(segmentLength, from.z, to.z, color);
 
     const group = new THREE.Group();
-    group.position.set(pointB.x, pointB.y, 0);
+    group.position.set(toX, toY, 0);
     group.rotation.set(0, 0, Math.atan(y / x));
     group.add(segment);
 
     scene.add(group);
   }
 
-  var gridHelper = new THREE.GridHelper(100, 21);
+  const gridHelper = new THREE.GridHelper(100, 21);
   gridHelper.rotateX(Math.PI / 2);
   scene.add(gridHelper);
+
+  const objectSize = Math.max(
+    positionData.xLimits.diff,
+    positionData.yLimits.diff
+  );
+  const distance = Math.abs(objectSize / Math.sin(FOV / 2));
+
+  camera.position.y = -distance;
+  camera.position.z = distance / 4;
 };

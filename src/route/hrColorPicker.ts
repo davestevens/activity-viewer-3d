@@ -5,6 +5,32 @@ interface IStep {
   color: Color;
 }
 
+export const colorFromValue = (
+  sortedSteps: IStep[],
+  value: number
+): THREE.Color => {
+  let lower: IStep | null = null;
+  let higher: IStep | null = null;
+
+  sortedSteps.forEach((step) => {
+    if (value > step.value) {
+      lower = step;
+    }
+    if (value < step.value && !higher) {
+      higher = step;
+    }
+  });
+
+  if (lower && higher) {
+    const percentage = (value - lower.value) / (higher.value - lower.value);
+    return lower.color.clone().lerp(higher.color, percentage);
+  } else if (lower) {
+    return lower.color;
+  } else {
+    return new Color(0x000000);
+  }
+};
+
 export const hrColorPicker = (
   steps: IStep[],
   data: number[]
@@ -16,25 +42,6 @@ export const hrColorPicker = (
     const max = Math.ceil(index);
     const value = MathUtils.lerp(data[min], data[max], index - min);
 
-    let lower: IStep | null = null;
-    let higher: IStep | null = null;
-
-    sortedSteps.forEach((step) => {
-      if (value > step.value) {
-        lower = step;
-      }
-      if (value < step.value && !higher) {
-        higher = step;
-      }
-    });
-
-    if (lower && higher) {
-      const percentage = (value - lower.value) / (higher.value - lower.value);
-      return lower.color.clone().lerp(higher.color, percentage);
-    } else if (lower) {
-      return lower.color;
-    } else {
-      return new Color(0x000000);
-    }
+    return colorFromValue(sortedSteps, value);
   };
 };
