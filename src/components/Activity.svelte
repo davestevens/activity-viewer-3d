@@ -17,7 +17,6 @@
       return;
     }
     getActivity(value).then((data) => {
-      console.log(data);
       if (!data.latlng || !data.heartrate) {
         alert("Missing GPS / Heart Rate data");
         return;

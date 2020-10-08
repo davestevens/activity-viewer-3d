@@ -53,7 +53,8 @@ const hrData = [
   { value: 0, color: new THREE.Color(0xff0000) },
 ];
 
-let mesh: THREE.Mesh;
+let route: THREE.Group;
+let gridHelper: THREE.GridHelper;
 
 export const setup = (container: HTMLElement): void => {
   camera.aspect = container.offsetWidth / container.offsetHeight;
@@ -82,8 +83,11 @@ export const setHeartRateData = (data: IZoneData): void => {
 };
 
 export const renderRoute = (data: IData): void => {
-  if (mesh) {
-    scene.remove(mesh);
+  if (route) {
+    scene.remove(route);
+  }
+  if (gridHelper) {
+    scene.remove(gridHelper);
   }
 
   const SEGMENT_WIDTH = 1;
@@ -139,6 +143,7 @@ export const renderRoute = (data: IData): void => {
     return group;
   };
 
+  route = new THREE.Group();
   const positionData = convertLatLngToPosition(
     data.latlng.data,
     data.altitude.data
@@ -168,10 +173,15 @@ export const renderRoute = (data: IData): void => {
     group.rotation.set(0, 0, Math.atan(y / x));
     group.add(segment);
 
-    scene.add(group);
+    route.add(group);
   }
 
-  const gridHelper = new THREE.GridHelper(100, 21);
+  scene.add(route);
+
+  const gridSize =
+    Math.max(positionData.xLimits.diff, positionData.yLimits.diff) * 1.05;
+  const divisionSize = 5;
+  gridHelper = new THREE.GridHelper(gridSize, gridSize / divisionSize);
   gridHelper.rotateX(Math.PI / 2);
   scene.add(gridHelper);
 
