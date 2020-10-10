@@ -48,7 +48,7 @@ interface IData {
 const orbit = new OrbitControls(camera, renderer.domElement);
 orbit.enableZoom = true;
 orbit.enablePan = true;
-orbit.autoRotate = false;
+orbit.autoRotate = true;
 
 const hrData = [
   { value: 0, color: new THREE.Color(0x0000ff) },
