@@ -3,7 +3,9 @@ main.svelte-neprcd{width:100vw;height:100vh;position:absolute;top:0;left:0}
 .sidebar-heading.svelte-1ra1a12{font-size:0.9rem;text-transform:uppercase}.subheading.svelte-1ra1a12{font-size:0.75rem}
 .list-group-item-action.svelte-zxh7u5{cursor:pointer}.muted.svelte-zxh7u5{color:#ddd}.select-arrow.svelte-zxh7u5{font-size:2.5em}
 .sidebar.svelte-vl3u22{margin-top:3rem;width:20rem;height:calc(100vh - 3rem);display:flex;flex-direction:column;border-right:1px solid #00000020}.sidebar-top.svelte-vl3u22{overflow:auto;flex-shrink:1}.sidebar-bottom__button.svelte-vl3u22{cursor:pointer}.sidebar-bottom.svelte-vl3u22{overflow:auto;flex-shrink:0}.sidebar-bottom__collapsable.collapse.svelte-vl3u22{height:0}
-main.svelte-1qwv5i{margin-top:3rem;width:calc(100% - 20rem)}
+main.svelte-z9uoww{margin-top:3rem;width:calc(100% - 20rem);height:calc(100% - 3rem)}
+.value.svelte-zy07vp{font-weight:700}.unit.svelte-zy07vp{font-size:0.7rem}
+div.svelte-j592bv{position:absolute;bottom:0;right:0;width:calc(100% - 20rem);height:3rem;background:#fff}
 /*!
  * Bootstrap v4.5.2 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors
@@ -4633,5 +4635,33 @@ readers do not read off random characters that represent icons */
 body {
   width: 100vw;
   height: 100vh;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media (max-width: 600px) {
+  html {
+    font-size: 8px;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media (min-width: 600px) {
+  html {
+    font-size: 10px;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media (min-width: 768px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media (min-width: 992px) {
+  html {
+    font-size: 14px;
+  }
 }
 
