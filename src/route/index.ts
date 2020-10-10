@@ -190,7 +190,7 @@ export const renderRoute = (data: IData): void => {
     startPosition.x + xOffset,
     startPosition.y + yOffset,
     startPosition.z + BASE_HEIGHT,
-    0xff0000
+    0x00ff00
   );
   route.add(start);
 
@@ -225,7 +225,7 @@ export const renderRoute = (data: IData): void => {
     endPosition.x + xOffset,
     endPosition.y + yOffset,
     endPosition.z + BASE_HEIGHT,
-    0x00ff00
+    0xff0000
   );
   route.add(end);
 
