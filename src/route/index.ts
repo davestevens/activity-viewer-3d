@@ -140,7 +140,7 @@ export const renderRoute = (data: IData): void => {
       } else if (y < 0) {
         return Math.PI / 2 + Math.atan(Math.abs(y) / Math.abs(x));
       } else {
-        return 0;
+        return Math.PI / 2;
       }
     } else if (x < 0) {
       if (y > 0) {
@@ -148,13 +148,13 @@ export const renderRoute = (data: IData): void => {
       } else if (y < 0) {
         return -(Math.PI / 2 + Math.atan(Math.abs(y) / Math.abs(x)));
       } else {
-        return Math.PI;
+        return -Math.PI / 2;
       }
     } else {
       if (y > 0) {
-        return Math.PI / 2;
+        return 0;
       } else if (y < 0) {
-        return -Math.PI / 2;
+        return -Math.PI;
       } else {
         return 0;
       }
