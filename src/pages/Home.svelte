@@ -24,7 +24,7 @@
 
 <div class="row h-100 justify-content-center align-items-start">
   <ExampleActivity />
-  <!-- <main class="col-4 card text-center">
+  <main class="col-4 card text-center">
     <h1 class="display-3">Activity Viewer 3D</h1>
     <p class="lead">
       View your Strava activities in 3D space with heartrate data visualization.
@@ -39,5 +39,5 @@
         {error}
       </div>
     {/if}
-  </main> -->
+  </main>
 </div>
