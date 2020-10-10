@@ -7,6 +7,11 @@ import { convertLatLngToPosition } from "./convertLatLngToPosition";
 // Sets Z axis to UP
 THREE.Object3D.DefaultUp.set(0, 0, 1);
 
+const SEGMENT_WIDTH = 1;
+const BASE_HEIGHT = 5;
+const GRID_EXTENSION = 1.05;
+const GRID_DIVISIONS = 11;
+
 const FOV = 40;
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x444444);
@@ -90,9 +95,7 @@ export const renderRoute = (data: IData): void => {
     scene.remove(gridHelper);
   }
 
-  const SEGMENT_WIDTH = 1;
-
-  const drawSegment = (length, z1, z2, color): THREE.Group => {
+  const buildSegment = (length, z1, z2, color): THREE.Group => {
     const group = new THREE.Group();
 
     const side = new THREE.Shape()
@@ -102,44 +105,74 @@ export const renderRoute = (data: IData): void => {
       .lineTo(0, z1)
       .lineTo(0, 0);
 
-    const pointHeightDiff = Math.abs(z2 - z1);
-    const topLength = Math.sqrt(
-      Math.pow(length, 2) + Math.pow(pointHeightDiff, 2)
-    );
-
-    const top = new THREE.Shape()
-      .moveTo(0, 0)
-      .lineTo(topLength, 0)
-      .lineTo(topLength, SEGMENT_WIDTH)
-      .lineTo(0, SEGMENT_WIDTH)
-      .lineTo(0, 0);
-    const topAngle = Math.atan(pointHeightDiff / length);
-
     const sideGeometry = new THREE.ShapeBufferGeometry(side);
-    const sideMesh = new THREE.Mesh(
+    const mesh = new THREE.Mesh(
       sideGeometry,
       new THREE.MeshPhongMaterial({ color, side: THREE.DoubleSide })
     );
-    const sideBMesh = sideMesh.clone();
-    sideMesh.position.set(0, 0, 0);
-    sideMesh.rotation.set(Math.PI / 2, 0, 0);
-    group.add(sideMesh);
-
-    sideBMesh.position.set(0, SEGMENT_WIDTH, 0);
-    sideBMesh.rotation.set(Math.PI / 2, 0, 0);
-    group.add(sideBMesh);
-
-    const topGeometry = new THREE.ShapeBufferGeometry(top);
-    const topMesh = new THREE.Mesh(
-      topGeometry,
-      new THREE.MeshPhongMaterial({ color, side: THREE.DoubleSide })
-    );
-    topMesh.position.set(0, 0, z1);
-    topMesh.rotation.set(0, (z1 > z2 ? 1 : -1) * topAngle, 0);
-    group.add(topMesh);
+    mesh.position.set(0, SEGMENT_WIDTH / 2, 0);
+    mesh.rotation.set(Math.PI / 2, 0, 0);
+    group.add(mesh);
 
     group.position.set(-length, -SEGMENT_WIDTH / 2, 0);
 
+    return group;
+  };
+
+  const buildFlag = (
+    x: number,
+    y: number,
+    z: number,
+    color: number
+  ): THREE.Object3D => {
+    const geometry = new THREE.CylinderGeometry(0.2, 0.2, z, 32);
+    const material = new THREE.MeshBasicMaterial({ color });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(x, y, z / 2);
+    mesh.rotation.set(Math.PI / 2, 0, 0);
+    return mesh;
+  };
+
+  const calculateAngle = (x: number, y: number): number => {
+    if (x > 0) {
+      if (y > 0) {
+        return Math.atan(Math.abs(x) / Math.abs(y));
+      } else if (y < 0) {
+        return Math.PI / 2 + Math.atan(Math.abs(y) / Math.abs(x));
+      } else {
+        return 0;
+      }
+    } else if (x < 0) {
+      if (y > 0) {
+        return -Math.atan(Math.abs(x) / Math.abs(y));
+      } else if (y < 0) {
+        return -(Math.PI / 2 + Math.atan(Math.abs(y) / Math.abs(x)));
+      } else {
+        return Math.PI;
+      }
+    } else {
+      if (y > 0) {
+        return Math.PI / 2;
+      } else if (y < 0) {
+        return -Math.PI / 2;
+      } else {
+        return 0;
+      }
+    }
+  };
+
+  const positionSegment = (
+    segment: THREE.Group,
+    x: number,
+    y: number,
+    xDiff: number,
+    yDiff: number
+  ): THREE.Group => {
+    const group = new THREE.Group();
+    group.position.set(x, y, 0);
+    const angle = calculateAngle(xDiff, yDiff);
+    group.rotation.set(0, 0, angle);
+    group.add(segment);
     return group;
   };
 
@@ -151,6 +184,16 @@ export const renderRoute = (data: IData): void => {
   const sortedSteps = hrData.sort((a, b) => a.value - b.value);
   const xOffset = 0 - positionData.xLimits.diff / 2;
   const yOffset = 0 - positionData.yLimits.diff / 2;
+
+  const startPosition = positionData.positions[0];
+  const start = buildFlag(
+    startPosition.x + xOffset,
+    startPosition.y + yOffset,
+    startPosition.z + BASE_HEIGHT,
+    0xff0000
+  );
+  scene.add(start);
+
   for (let i = 1; i < positionData.positions.length; ++i) {
     const from = positionData.positions[i - 1];
     const fromX = from.x + xOffset;
@@ -159,29 +202,39 @@ export const renderRoute = (data: IData): void => {
     const toX = to.x + xOffset;
     const toY = to.y + yOffset;
 
-    const x = Math.abs(toX - fromX);
-    const y = Math.abs(toY - fromY);
-    const segmentLength = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    const xDiff = toX - fromX;
+    const yDiff = toY - fromY;
+    const segmentLength = Math.sqrt(xDiff ** 2 + yDiff ** 2);
     const color = colorFromValue(
       sortedSteps,
       (data.heartrate.data[i - 1] + data.heartrate.data[i]) / 2
     );
-    const segment = drawSegment(segmentLength, from.z, to.z, color);
+    const segment = buildSegment(
+      segmentLength,
+      from.z + BASE_HEIGHT,
+      to.z + BASE_HEIGHT,
+      color
+    );
+    const positionedSegment = positionSegment(segment, toX, toY, yDiff, xDiff);
 
-    const group = new THREE.Group();
-    group.position.set(toX, toY, 0);
-    group.rotation.set(0, 0, Math.atan(y / x));
-    group.add(segment);
-
-    route.add(group);
+    route.add(positionedSegment);
   }
+
+  const endPosition = positionData.positions[positionData.positions.length - 1];
+  const end = buildFlag(
+    endPosition.x + xOffset,
+    endPosition.y + yOffset,
+    endPosition.z + BASE_HEIGHT,
+    0x00ff00
+  );
+  scene.add(end);
 
   scene.add(route);
 
   const gridSize =
-    Math.max(positionData.xLimits.diff, positionData.yLimits.diff) * 1.05;
-  const divisionSize = 5;
-  gridHelper = new THREE.GridHelper(gridSize, gridSize / divisionSize);
+    Math.max(positionData.xLimits.diff, positionData.yLimits.diff) *
+    GRID_EXTENSION;
+  gridHelper = new THREE.GridHelper(gridSize, GRID_DIVISIONS);
   gridHelper.rotateX(Math.PI / 2);
   scene.add(gridHelper);
 
