@@ -66,7 +66,7 @@
   }
 </style>
 
-<div class="p-1 d-flex justify-content-around">
+<div class="p-1 d-flex flex-wrap justify-content-around">
   {#each overviews as overview}
     <ActivityOverviewItem {...overview} />
   {/each}

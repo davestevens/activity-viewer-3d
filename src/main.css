@@ -2,3 +2,31 @@ body {
   width: 100vw;
   height: 100vh;
 }
+
+/* Extra small devices (phones, 600px and down) */
+@media (max-width: 600px) {
+  html {
+    font-size: 8px;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media (min-width: 600px) {
+  html {
+    font-size: 10px;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media (min-width: 768px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media (min-width: 992px) {
+  html {
+    font-size: 14px;
+  }
+}
