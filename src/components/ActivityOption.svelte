@@ -30,7 +30,7 @@
 
 <div
   class="list-group-item"
-  class:list-group-item-primary={$activityStore.id === activity.id}
+  class:list-group-item-primary={$activityStore && $activityStore.id === activity.id}
   class:list-group-item-action={isSelectable}
   class:text-muted={!isSelectable}
   on:click={onSelect}
