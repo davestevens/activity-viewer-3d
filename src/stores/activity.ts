@@ -1,10 +1,11 @@
 import { writable } from "svelte/store";
 import { SELECTED_ACTIVITY_KEY } from "../consts";
+import type { IActivity } from "../services/getActivities";
 
 const createActivity = () => {
   const initialValue =
     JSON.parse(localStorage.getItem(SELECTED_ACTIVITY_KEY)) || null;
-  const { set, subscribe } = writable<string | null>(initialValue);
+  const { set, subscribe } = writable<IActivity | null>(initialValue);
 
   subscribe((val) => {
     localStorage.setItem(SELECTED_ACTIVITY_KEY, JSON.stringify(val));
@@ -13,7 +14,7 @@ const createActivity = () => {
   return {
     subscribe,
     clearActivity: () => set(null),
-    selectActivity: (id: string) => set(id),
+    selectActivity: (activity: IActivity) => set(activity),
   };
 };
 
