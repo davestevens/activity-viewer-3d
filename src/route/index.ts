@@ -22,7 +22,7 @@ const camera = new THREE.PerspectiveCamera(
   5000
 );
 
-const ambientLight = new THREE.AmbientLight(0x404040);
+const ambientLight = new THREE.AmbientLight(0x808080);
 scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.85);
@@ -192,7 +192,7 @@ export const renderRoute = (data: IData): void => {
     startPosition.z + BASE_HEIGHT,
     0xff0000
   );
-  scene.add(start);
+  route.add(start);
 
   for (let i = 1; i < positionData.positions.length; ++i) {
     const from = positionData.positions[i - 1];
@@ -227,7 +227,7 @@ export const renderRoute = (data: IData): void => {
     endPosition.z + BASE_HEIGHT,
     0x00ff00
   );
-  scene.add(end);
+  route.add(end);
 
   scene.add(route);
 
@@ -244,6 +244,7 @@ export const renderRoute = (data: IData): void => {
   );
   const distance = Math.abs(objectSize / Math.sin(FOV / 2));
 
+  orbit.reset();
   camera.position.y = -distance;
   camera.position.z = distance / 4;
 };
