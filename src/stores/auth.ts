@@ -3,6 +3,7 @@ import { AUTH_KEY } from "../consts";
 
 export interface IAuthStore {
   access_token: string;
+  expires_at: number;
   athlete: {
     firstname: string;
     lastname: string;
