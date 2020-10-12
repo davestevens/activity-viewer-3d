@@ -2,6 +2,10 @@
 // Based on code from https://stackoverflow.com/a/53827343
 const EARTH_RADIUS_KM = 6371;
 
+// NOTE: this is actually 20
+// Based on 100m GPS difference rendering at 5 points difference
+const LAT_LNG_TO_ALTITUDE_RATIO = 1;
+
 interface IPosition {
   x: number;
   y: number;
@@ -52,7 +56,7 @@ export const convertLatLngToPosition = (
     positions: positions.map(({ x, y, z }) => ({
       x: -(x - xLimits.min) + xLimits.diff,
       y: y - yLimits.min,
-      z: z - zLimits.min,
+      z: (z - zLimits.min) / LAT_LNG_TO_ALTITUDE_RATIO,
     })),
   };
 };
