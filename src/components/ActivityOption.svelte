@@ -4,7 +4,7 @@
   import { activity as activityStore } from "../stores/activity";
 
   const dateString = new Date(activity.start_date).toLocaleString();
-  const isSelectable = activity.has_heartrate && !!activity.start_latlng;
+  const isSelectable = activity.has_heartrate;
 
   const onSelect = (): void => {
     if (!isSelectable) {

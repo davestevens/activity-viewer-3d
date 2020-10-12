@@ -2,16 +2,19 @@ import { getRequest } from "./authedRequest";
 import { ACTIVITY_KEY } from "../consts";
 
 export interface IActivity {
-  latlng: {
+  distance: {
+    data: number[];
+  };
+  latlng?: {
     data: number[][];
   };
-  velocity_smooth: {
+  velocity_smooth?: {
     data: number[];
   };
-  altitude: {
+  altitude?: {
     data: number[];
   };
-  heartrate: {
+  heartrate?: {
     data: number[];
   };
 }

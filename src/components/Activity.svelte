@@ -17,8 +17,8 @@
       return;
     }
     getActivity(value.id).then((data) => {
-      if (!data.latlng || !data.heartrate) {
-        alert("Missing GPS / Heart Rate data");
+      if (!data.heartrate) {
+        alert("Missing Heart Rate data");
         return;
       }
       renderRoute(data);
