@@ -7,7 +7,6 @@ import { convertLatLngToPosition } from "./convertLatLngToPosition";
 // Sets Z axis to UP
 THREE.Object3D.DefaultUp.set(0, 0, 1);
 
-const SEGMENT_WIDTH = 1;
 const BASE_HEIGHT = 5;
 const GRID_EXTENSION = 1.05;
 const GRID_DIVISIONS = 11;
@@ -60,6 +59,7 @@ const hrData = [
 
 let route: THREE.Group;
 let gridHelper: THREE.GridHelper;
+const meshes: THREE.Mesh[] = [];
 
 export const setup = (container: HTMLElement): void => {
   camera.aspect = container.offsetWidth / container.offsetHeight;
@@ -87,6 +87,15 @@ export const setHeartRateData = (data: IZoneData): void => {
   });
 };
 
+const cleanUp = (): void => {
+  meshes.forEach((object) => {
+    [].concat(object.material).forEach((material) => material.dispose());
+    object.geometry.dispose();
+  });
+  meshes.length = 0;
+  renderer.renderLists.dispose();
+};
+
 export const renderRoute = (data: IData): void => {
   if (route) {
     scene.remove(route);
@@ -95,9 +104,9 @@ export const renderRoute = (data: IData): void => {
     scene.remove(gridHelper);
   }
 
-  const buildSegment = (length, z1, z2, color): THREE.Group => {
-    const group = new THREE.Group();
+  cleanUp();
 
+  const buildSegment = (length, z1, z2, color): THREE.Mesh => {
     const side = new THREE.Shape()
       .moveTo(0, 0)
       .lineTo(length, 0)
@@ -110,13 +119,9 @@ export const renderRoute = (data: IData): void => {
       sideGeometry,
       new THREE.MeshPhongMaterial({ color, side: THREE.DoubleSide })
     );
-    mesh.position.set(0, SEGMENT_WIDTH / 2, 0);
     mesh.rotation.set(Math.PI / 2, 0, 0);
-    group.add(mesh);
-
-    group.position.set(-length, -SEGMENT_WIDTH / 2, 0);
-
-    return group;
+    mesh.position.set(-length, 0, 0);
+    return mesh;
   };
 
   const buildFlag = (
@@ -124,7 +129,7 @@ export const renderRoute = (data: IData): void => {
     y: number,
     z: number,
     color: number
-  ): THREE.Object3D => {
+  ): THREE.Mesh => {
     const geometry = new THREE.CylinderGeometry(0.2, 0.2, z, 32);
     const material = new THREE.MeshBasicMaterial({ color });
     const mesh = new THREE.Mesh(geometry, material);
@@ -162,7 +167,7 @@ export const renderRoute = (data: IData): void => {
   };
 
   const positionSegment = (
-    segment: THREE.Group,
+    segment: THREE.Object3D,
     x: number,
     y: number,
     xDiff: number,
@@ -192,6 +197,7 @@ export const renderRoute = (data: IData): void => {
     startPosition.z + BASE_HEIGHT,
     0x00ff00
   );
+  meshes.push(start);
   route.add(start);
 
   for (let i = 1; i < positionData.positions.length; ++i) {
@@ -215,6 +221,7 @@ export const renderRoute = (data: IData): void => {
       to.z + BASE_HEIGHT,
       color
     );
+    meshes.push(segment);
     const positionedSegment = positionSegment(segment, toX, toY, yDiff, xDiff);
 
     route.add(positionedSegment);
@@ -227,6 +234,7 @@ export const renderRoute = (data: IData): void => {
     endPosition.z + BASE_HEIGHT,
     0xff0000
   );
+  meshes.push(end);
   route.add(end);
 
   scene.add(route);
