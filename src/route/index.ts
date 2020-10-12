@@ -13,6 +13,7 @@ THREE.Object3D.DefaultUp.set(0, 0, 1);
 
 const GRID_EXTENSION = 1.05;
 const GRID_DIVISIONS = 11;
+const DATA_SIZE_LIMIT = 4000;
 
 const FOV = 40;
 const scene = new THREE.Scene();
@@ -95,8 +96,10 @@ export const renderRoute = (data: IActivity): void => {
   cleanUp();
 
   route = new THREE.Group();
+  const dataPoints = data.distance.data.length;
+  const skip = Math.ceil(dataPoints / DATA_SIZE_LIMIT);
   const positionData = getPositions(
-    data.distance.data.length,
+    dataPoints,
     data.latlng?.data,
     data.altitude?.data
   );
@@ -112,8 +115,8 @@ export const renderRoute = (data: IActivity): void => {
   meshes.push(start);
   route.add(start);
 
-  for (let i = 1; i < positionData.positions.length; ++i) {
-    const from = positionData.positions[i - 1];
+  for (let i = skip; i < positionData.positions.length; i += skip) {
+    const from = positionData.positions[i - skip];
     const to = positionData.positions[i];
     const xDiff = to.x - from.x;
     const yDiff = to.y - from.y;
